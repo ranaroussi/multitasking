@@ -1,0 +1,6 @@
+__pycache__/*
+multitasking/__pycache__/*
+dist
+build
+multitasking.egg-info
+*.pyc

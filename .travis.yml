@@ -1,0 +1,24 @@
+language: python
+
+sudo: true
+fast_finish: true
+
+python:
+  - "2.7"
+  - "3.4"
+  - "3.5"
+
+install:
+  # - pip install Cython
+  # - pip install -r requirements.txt
+  - pip install .
+
+script:
+  - nosetests
+
+after_success:
+  - coveralls
+
+branches:
+  only:
+    - master
