@@ -27,13 +27,14 @@ MultiTasking: Non-blocking Python methods using decorators
 
 \
 
-**MultiTasking** is a Python library lets you convert your Python methods into asynchronous,
-non-blocking methods simply by using decorators.
+**MultiTasking** is a tiny Python library lets you convert your Python methods into asynchronous,
+non-blocking methods simply by using a decorator.
 
 Example
 --------------------
 .. code:: python
 
+    # example.py
     import multitasking
     import time
     import random
@@ -42,21 +43,47 @@ Example
     # kill all tasks on ctrl-c
     signal.signal(signal.SIGINT, multitasking.killall)
 
-    # to wait for task to finish, use:
+    # or, wait for task to finish on ctrl-c:
     # signal.signal(signal.SIGINT, multitasking.wait_for_tasks)
 
-    @multitasking.task
+    @multitasking.task # <== this is all it takes :-)
     def hello(count):
         sleep = random.randint(1,10)/2
         print("Hello %s (sleeping for %ss)" % (count, sleep))
         time.sleep(sleep)
         print("Goodbye %s (after for %ss)" % (count, sleep))
 
-
     if __name__ == "__main__":
         for i in range(0, 10):
             hello(i+1)
 
+
+The output would look something like this:
+
+.. code:: bash
+
+    $ python example.py
+
+    Hello 1 (sleeping for 0.5s)
+    Hello 2 (sleeping for 1.0s)
+    Hello 3 (sleeping for 5.0s)
+    Hello 4 (sleeping for 0.5s)
+    Hello 5 (sleeping for 2.5s)
+    Hello 6 (sleeping for 3.0s)
+    Hello 7 (sleeping for 0.5s)
+    Hello 8 (sleeping for 4.0s)
+    Hello 9 (sleeping for 3.0s)
+    Hello 10 (sleeping for 1.0s)
+    Goodbye 1 (after for 0.5s)
+    Goodbye 4 (after for 0.5s)
+    Goodbye 7 (after for 0.5s)
+    Goodbye 2 (after for 1.0s)
+    Goodbye 10 (after for 1.0s)
+    Goodbye 5 (after for 2.5s)
+    Goodbye 6 (after for 3.0s)
+    Goodbye 9 (after for 3.0s)
+    Goodbye 8 (after for 4.0s)
+    Goodbye 3 (after for 5.0s)
 
 Installation
 ============
@@ -71,5 +98,5 @@ Install multitasking using ``pip``:
 Legal Stuff
 ===========
 
-multitasking is distributed under the **GNU Lesser General Public License v3.0**. See the `LICENSE.txt <./LICENSE.txt>`_ file in the release for details.
-multitasking is not a product of Interactive Brokers, nor is it affiliated with Interactive Brokers.
+MultiTasking is distributed under the **GNU Lesser General Public License v3.0**. See the `LICENSE.txt <./LICENSE.txt>`_ file in the release for details.
+MultiTasking is not a product of Interactive Brokers, nor is it affiliated with Interactive Brokers.
