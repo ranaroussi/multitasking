@@ -85,6 +85,38 @@ The output would look something like this:
     Goodbye 8 (after for 4.0s)
     Goodbye 3 (after for 5.0s)
 
+
+Settings
+========
+
+The default maximum threads is equal to the # of CPU Cores.
+**This is just a rule of thumb!** The ``Thread`` module isn't actually using more than one core at a time.
+
+You can change the default maximum number of threads using:
+
+.. code:: python
+
+    import multitasking
+    multitasking.set_max_threads(10)
+
+...or, if you want to set the maximum number of threads based on the number of CPU Cores, you can:
+
+.. code:: python
+
+    import multitasking
+    multitasking.set_max_threads(multitasking.__CPU_CORES__ * 5)
+
+For applications that doesn't require access to shared resources,
+you can set ``MultiTasking`` to use ``multiprocessing.Process()``
+instead of the ``threading.Thread()``, thus avoiding some of the
+`GIL constraints <https://jeffknupp.com/blog/2013/06/30/pythons-hardest-problem-revisited/>`_.
+
+.. code:: python
+
+    import multitasking
+    multitasking.set_engine("process") # "process" or "thread"
+
+
 Installation
 ============
 
