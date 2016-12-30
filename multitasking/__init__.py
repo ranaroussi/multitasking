@@ -19,28 +19,62 @@
 # limitations under the License.
 #
 
-__version__ = "0.0.1a"
+__version__ = "0.0.2a"
 
-from threading import Thread
 from sys import exit as sysexit
 from os import _exit as osexit
+
+from threading import Thread, Semaphore
+from multiprocessing import Process, cpu_count
 
 __KILL_RECEIVED__ = False
 __TASKS__ = []
 
+# processing
+__ENGINE__      = Thread
+__MAX_THREADS__ = cpu_count()
+__CPU_CORES__   = cpu_count()
+__POOL__        = None
+
+def set_max_threads(threads=None):
+    global __MAX_THREADS__
+    if threads is not None:
+        __MAX_THREADS__ = threads
+    else:
+        __MAX_THREADS__ = cpu_count()
+
+def set_engine(kind=""):
+    global __ENGINE__
+    if "process" in kind.lower():
+        __ENGINE__ = Process
+    else:
+        __ENGINE__ = Thread
+
+def _init_pool():
+    global __POOL__, __MAX_THREADS__
+    if __POOL__ is None:
+        __POOL__ = Semaphore(__MAX_THREADS__)
+
 def task(callee):
-    global __KILL_RECEIVED__, __TASKS__
+    global __POOL__, __ENGINE__, __KILL_RECEIVED__, __TASKS__
+
+    _init_pool()
+
+    def _run_via_pool(*args, **kwargs):
+        with __POOL__:
+            return callee(*args, **kwargs)
+
     def async_method(*args, **kwargs):
         if not __KILL_RECEIVED__:
-            thread = Thread(target=callee, args=args, kwargs=kwargs, daemon=False)
-            __TASKS__.append(thread)
-            thread.start()
-            return thread
+            task = __ENGINE__(target=_run_via_pool, args=args, kwargs=kwargs, daemon=False)
+            __TASKS__.append(task)
+            task.start()
+            return task
 
     return async_method
 
 def wait_for_tasks(*args, **kwargs):
-    global __KILL_RECEIVED__
+    global __KILL_RECEIVED__, __TASKS__
     __KILL_RECEIVED__ = True
 
     try:
