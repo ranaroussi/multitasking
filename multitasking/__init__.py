@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-__version__ = "0.0.2a"
+__version__ = "0.0.3a"
 
 from sys import exit as sysexit
 from os import _exit as osexit
@@ -27,14 +27,16 @@ from os import _exit as osexit
 from threading import Thread, Semaphore
 from multiprocessing import Process, cpu_count
 
-__KILL_RECEIVED__ = False
-__TASKS__ = []
+__CPU_CORES__   = cpu_count()
 
 # processing
-__ENGINE__      = Thread
-__MAX_THREADS__ = cpu_count()
-__CPU_CORES__   = cpu_count()
-__POOL__        = None
+__ENGINE__        = "thread"
+__MAX_THREADS__   = cpu_count()
+__KILL_RECEIVED__ = False
+__TASKS__         = []
+__POOLS__         = {}
+__POOL_NAME__     = "Main"
+
 
 def set_max_threads(threads=None):
     global __MAX_THREADS__
@@ -43,39 +45,78 @@ def set_max_threads(threads=None):
     else:
         __MAX_THREADS__ = cpu_count()
 
+
 def set_engine(kind=""):
     global __ENGINE__
     if "process" in kind.lower():
-        __ENGINE__ = Process
+        __ENGINE__ = "process"
     else:
-        __ENGINE__ = Thread
+        __ENGINE__ = "thread"
 
-def _init_pool():
-    global __POOL__, __MAX_THREADS__
-    if __POOL__ is None:
-        __POOL__ = Semaphore(__MAX_THREADS__)
+def getPool(name=None):
+    if name is None:
+        name = __POOL_NAME__
+
+    return {
+        "engine": "thread" if __POOLS__[__POOL_NAME__]["engine"] == Thread else "process",
+        "name": name,
+        "threads": __POOLS__[__POOL_NAME__]["threads"]
+    }
+
+def createPool(name="main", threads=None, engine=None):
+    global __MAX_THREADS__, __ENGINE__, __POOLS__, __POOL_NAME__
+
+    __POOL_NAME__ = name
+
+    try: threads = int(threads)
+    except: threads = __MAX_THREADS__
+    if threads < 2: threads = 0
+
+
+    engine = engine if engine is not None else "thread"
+
+    __MAX_THREADS__ = threads
+    __ENGINE__ = engine
+
+    __POOLS__[__POOL_NAME__] = {
+        "pool": Semaphore(threads) if threads > 0 else None,
+        "engine": Process if "process" in engine.lower() else Thread,
+        "name": name,
+        "threads": threads
+    }
 
 def task(callee):
-    global __POOL__, __ENGINE__, __KILL_RECEIVED__, __TASKS__
+    global __KILL_RECEIVED__, __TASKS__, __POOLS__, __POOL_NAME__
 
-    _init_pool()
+    # create default pool if nont exists
+    if not __POOLS__:
+        createPool()
 
     def _run_via_pool(*args, **kwargs):
-        with __POOL__:
+        with __POOLS__[__POOL_NAME__]['pool']:
             return callee(*args, **kwargs)
 
     def async_method(*args, **kwargs):
+        # no threads
+        if __POOLS__[__POOL_NAME__]['threads'] == 0:
+            return callee(*args, **kwargs)
+
+        # has threads
         if not __KILL_RECEIVED__:
-            task = __ENGINE__(target=_run_via_pool, args=args, kwargs=kwargs, daemon=False)
+            task = __POOLS__[__POOL_NAME__]['engine'](
+                target=_run_via_pool, args=args, kwargs=kwargs, daemon=False)
             __TASKS__.append(task)
             task.start()
             return task
 
     return async_method
 
-def wait_for_tasks(*args, **kwargs):
-    global __KILL_RECEIVED__, __TASKS__
+def wait_for_tasks():
+    global __KILL_RECEIVED__, __TASKS__, __POOLS__, __POOL_NAME__
     __KILL_RECEIVED__ = True
+
+    if __POOLS__[__POOL_NAME__]['threads'] == 0:
+        return True
 
     try:
         running = len([t.join(1) for t in __TASKS__ if t is not None and t.isAlive()])
@@ -85,7 +126,7 @@ def wait_for_tasks(*args, **kwargs):
         pass
     return True
 
-def killall(*args, **kwargs):
+def killall(cls):
     global __KILL_RECEIVED__
     __KILL_RECEIVED__ = True
     try:
