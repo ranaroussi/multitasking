@@ -20,7 +20,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='multitasking',
-    version='0.0.3',
+    version='0.0.4',
     description='Simple async w/o async',
     long_description=long_description,
     url='https://github.com/ranaroussi/multitasking',
@@ -29,7 +29,7 @@ setup(
     license='LGPL',
     classifiers=[
         'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
 
         'Operating System :: OS Independent',
         'Intended Audience :: Developers',
@@ -39,6 +39,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
     platforms = ['any'],
     keywords='multitasking async multitask threading',

@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-__version__ = "0.0.3a"
+__version__ = "0.0.4a"
 
 from sys import exit as sysexit
 from os import _exit as osexit
