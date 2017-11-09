@@ -1,6 +1,10 @@
 Change Log
 ===========
 
+0.0.5
+-------
+- Fixed ``takes 1 positional argument but 2 were given`` on ``killall()``
+
 0.0.4
 -------
 - Added Python 3.6 support in pip setup

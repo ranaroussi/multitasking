@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-__version__ = "0.0.4a"
+__version__ = "0.0.5a"
 
 from sys import exit as sysexit
 from os import _exit as osexit
@@ -103,8 +103,12 @@ def task(callee):
 
         # has threads
         if not __KILL_RECEIVED__:
-            task = __POOLS__[__POOL_NAME__]['engine'](
-                target=_run_via_pool, args=args, kwargs=kwargs, daemon=False)
+            try:
+                task = __POOLS__[__POOL_NAME__]['engine'](
+                    target=_run_via_pool, args=args, kwargs=kwargs, daemon=False)
+            except:
+                task = __POOLS__[__POOL_NAME__]['engine'](
+                    target=_run_via_pool, args=args, kwargs=kwargs)
             __TASKS__.append(task)
             task.start()
             return task
@@ -126,7 +130,7 @@ def wait_for_tasks():
         pass
     return True
 
-def killall(cls):
+def killall(self, cls):
     global __KILL_RECEIVED__
     __KILL_RECEIVED__ = True
     try:
