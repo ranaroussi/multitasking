@@ -45,9 +45,4 @@ setup(
     keywords='multitasking async multitask threading',
     packages=find_packages(exclude=['contrib', 'docs', 'tests', 'demo', 'demos', 'examples']),
     install_requires=[],
-    entry_points={
-        'console_scripts': [
-            'sample=sample:main',
-        ],
-    },
 )
