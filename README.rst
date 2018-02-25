@@ -104,7 +104,7 @@ You can change the default maximum number of threads using:
 .. code:: python
 
     import multitasking
-    multitasking.set_max_threads(multitasking.__CPU_CORES__ * 5)
+    multitasking.set_max_threads(multitasking.config["CPU_CORES"] * 5)
 
 For applications that doesn't require access to shared resources,
 you can set ``MultiTasking`` to use ``multiprocessing.Process()``

@@ -27,59 +27,63 @@ from os import _exit as osexit
 from threading import Thread, Semaphore
 from multiprocessing import Process, cpu_count
 
-class _settings:
-    CPU_CORES = cpu_count()
-    ENGINE = "thread"
-    MAX_THREADS = cpu_count()
-    KILL_RECEIVED = False
-    TASKS = []
-    POOLS = {}
-    POOL_NAME = "Main"
+config = {
+    "CPU_CORES": cpu_count(),
+    "ENGINE": "thread",
+    "MAX_THREADS": cpu_count(),
+    "KILL_RECEIVED": False,
+    "TASKS": [],
+    "POOLS": {},
+    "POOL_NAME": "Main"
+}
 
-config = _settings()
 
 def set_max_threads(threads=None):
     if threads is not None:
-        config.MAX_THREADS = threads
+        config["MAX_THREADS"] = threads
     else:
-        config.MAX_THREADS = cpu_count()
+        config["MAX_THREADS"] = cpu_count()
 
 
 def set_engine(kind=""):
     if "process" in kind.lower():
-        config.ENGINE = "process"
+        config["ENGINE"] = "process"
     else:
-        config.ENGINE = "thread"
+        config["ENGINE"] = "thread"
 
 
 def getPool(name=None):
     if name is None:
-        name = config.POOL_NAME
+        name = config["POOL_NAME"]
+
+    engine = "thread"
+    if config["POOLS"][config["POOL_NAME"]]["engine"] == Thread:
+        engine = "process"
 
     return {
-        "engine": "thread" if config.POOLS[config.POOL_NAME]["engine"] == Thread else "process",
+        "engine": engine,
         "name": name,
-        "threads": config.POOLS[config.POOL_NAME]["threads"]
+        "threads": config["POOLS"][config["POOL_NAME"]]["threads"]
     }
 
 
 def createPool(name="main", threads=None, engine=None):
 
-    config.POOL_NAME = name
+    config["POOL_NAME"] = name
 
     try:
         threads = int(threads)
     except:
-        threads = config.MAX_THREADS
+        threads = config["MAX_THREADS"]
     if threads < 2:
         threads = 0
 
     engine = engine if engine is not None else "thread"
 
-    config.MAX_THREADS = threads
-    config.ENGINE = engine
+    config["MAX_THREADS"] = threads
+    config["ENGINE"] = engine
 
-    config.POOLS[config.POOL_NAME] = {
+    config["POOLS"][config["POOL_NAME"]] = {
         "pool": Semaphore(threads) if threads > 0 else None,
         "engine": Process if "process" in engine.lower() else Thread,
         "name": name,
@@ -90,27 +94,27 @@ def createPool(name="main", threads=None, engine=None):
 def task(callee):
 
     # create default pool if nont exists
-    if not config.POOLS:
+    if not config["POOLS"]:
         createPool()
 
     def _run_via_pool(*args, **kwargs):
-        with config.POOLS[config.POOL_NAME]['pool']:
+        with config["POOLS"][config["POOL_NAME"]]['pool']:
             return callee(*args, **kwargs)
 
     def async_method(*args, **kwargs):
         # no threads
-        if config.POOLS[config.POOL_NAME]['threads'] == 0:
+        if config["POOLS"][config["POOL_NAME"]]['threads'] == 0:
             return callee(*args, **kwargs)
 
         # has threads
-        if not config.KILL_RECEIVED:
+        if not config["KILL_RECEIVED"]:
             try:
-                single = config.POOLS[config.POOL_NAME]['engine'](
+                single = config["POOLS"][config["POOL_NAME"]]['engine'](
                     target=_run_via_pool, args=args, kwargs=kwargs, daemon=False)
             except:
-                single = config.POOLS[config.POOL_NAME]['engine'](
+                single = config["POOLS"][config["POOL_NAME"]]['engine'](
                     target=_run_via_pool, args=args, kwargs=kwargs)
-            config.TASKS.append(single)
+            config["TASKS"].append(single)
             single.start()
             return single
 
@@ -118,24 +122,24 @@ def task(callee):
 
 
 def wait_for_tasks():
-    config.KILL_RECEIVED = True
+    config["KILL_RECEIVED"] = True
 
-    if config.POOLS[config.POOL_NAME]['threads'] == 0:
+    if config["POOLS"][config["POOL_NAME"]]['threads'] == 0:
         return True
 
     try:
         running = len([t.join(1)
-                       for t in config.TASKS if t is not None and t.isAlive()])
+                       for t in config["TASKS"] if t is not None and t.isAlive()])
         while running > 0:
             running = len([t.join(1)
-                           for t in config.TASKS if t is not None and t.isAlive()])
+                           for t in config["TASKS"] if t is not None and t.isAlive()])
     except:
         pass
     return True
 
 
 def killall():
-    config.KILL_RECEIVED = True
+    config["KILL_RECEIVED"] = True
     try:
         sysexit(0)
     except SystemExit:
