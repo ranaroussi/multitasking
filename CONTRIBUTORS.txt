@@ -1,5 +1,6 @@
 # This file contains a list of people who have made contributions
-# to the public version of QTPyLib.
+# to the public version of multitasking.
 
 Ran Aroussi, Creator <https://github.com/ranaroussi>
-jkleint, Contributor <https://github.com/jkleint>
+Khairul Imam, Contributor <https://github.com/jkleint>
+Anders Kaseorg, Contributor <https://github.com/andersk>
