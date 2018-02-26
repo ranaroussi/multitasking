@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-__version__ = "0.0.6a"
+__version__ = "0.0.7a"
 
 from sys import exit as sysexit
 from os import _exit as osexit
@@ -138,7 +138,7 @@ def wait_for_tasks():
     return True
 
 
-def killall():
+def killall(self, cls):
     config["KILL_RECEIVED"] = True
     try:
         sysexit(0)

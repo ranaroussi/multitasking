@@ -1,6 +1,15 @@
 Change Log
 ===========
 
+0.0.7
+-------
+- Bugfix
+
+
+0.0.6
+-------
+- Code linting / refactoring
+
 0.0.5
 -------
 - Fixed ``takes 1 positional argument but 2 were given`` on ``killall()``
