@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-__version__ = "0.0.7a"
+__version__ = "0.0.8"
 
 from sys import exit as sysexit
 from os import _exit as osexit
@@ -73,12 +73,12 @@ def createPool(name="main", threads=None, engine=None):
 
     try:
         threads = int(threads)
-    except:
+    except Exception:
         threads = config["MAX_THREADS"]
     if threads < 2:
         threads = 0
 
-    engine = engine if engine is not None else "thread"
+    engine = engine if engine is not None else config["ENGINE"]
 
     config["MAX_THREADS"] = threads
     config["ENGINE"] = engine
@@ -111,7 +111,7 @@ def task(callee):
             try:
                 single = config["POOLS"][config["POOL_NAME"]]['engine'](
                     target=_run_via_pool, args=args, kwargs=kwargs, daemon=False)
-            except:
+            except Exception:
                 single = config["POOLS"][config["POOL_NAME"]]['engine'](
                     target=_run_via_pool, args=args, kwargs=kwargs)
             config["TASKS"].append(single)
@@ -129,11 +129,11 @@ def wait_for_tasks():
 
     try:
         running = len([t.join(1)
-                       for t in config["TASKS"] if t is not None and t.isAlive()])
+                       for t in config["TASKS"] if t is not None and t.is_alive()])
         while running > 0:
             running = len([t.join(1)
-                           for t in config["TASKS"] if t is not None and t.isAlive()])
-    except:
+                           for t in config["TASKS"] if t is not None and t.is_alive()])
+    except Exception:
         pass
     return True
 
