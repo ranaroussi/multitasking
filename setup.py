@@ -23,9 +23,9 @@ setup(
     url='https://github.com/ranaroussi/multitasking',
     author='Ran Aroussi',
     author_email='ran@aroussi.com',
-    license='LGPL',
+    license='Apache',
     classifiers=[
-        'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
+        'License :: OSI Approved :: Apache Software License',
         'Development Status :: 5 - Production/Stable',
 
         'Operating System :: OS Independent',
