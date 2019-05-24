@@ -135,6 +135,9 @@ def wait_for_tasks():
                            for t in config["TASKS"] if t is not None and t.is_alive()])
     except Exception:
         pass
+
+    config["KILL_RECEIVED"] = False
+
     return True
 
 
@@ -144,3 +147,5 @@ def killall(self, cls):
         sysexit(0)
     except SystemExit:
         osexit(0)
+
+    config["KILL_RECEIVED"] = False
