@@ -4,7 +4,7 @@ Change Log
 0.0.9
 -------
 - Changed licence to Apache License
-- Setting ``config["KILL_RECEIVED"]=True`` after ``wait_for_tasks()`
+- Setting ``config["KILL_RECEIVED"]=False`` after ``wait_for_tasks()`
 - Code PEP'ed
 
 0.0.8
