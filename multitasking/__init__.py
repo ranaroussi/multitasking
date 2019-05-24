@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-__version__ = "0.0.8"
+__version__ = "0.0.9"
 
 from sys import exit as sysexit
 from os import _exit as osexit
@@ -110,7 +110,8 @@ def task(callee):
         if not config["KILL_RECEIVED"]:
             try:
                 single = config["POOLS"][config["POOL_NAME"]]['engine'](
-                    target=_run_via_pool, args=args, kwargs=kwargs, daemon=False)
+                    target=_run_via_pool, args=args,
+                    kwargs=kwargs, daemon=False)
             except Exception:
                 single = config["POOLS"][config["POOL_NAME"]]['engine'](
                     target=_run_via_pool, args=args, kwargs=kwargs)
@@ -128,11 +129,11 @@ def wait_for_tasks():
         return True
 
     try:
-        running = len([t.join(1)
-                       for t in config["TASKS"] if t is not None and t.is_alive()])
+        running = len([t.join(1) for t in config["TASKS"]
+                       if t is not None and t.is_alive()])
         while running > 0:
-            running = len([t.join(1)
-                           for t in config["TASKS"] if t is not None and t.is_alive()])
+            running = len([t.join(1) for t in config["TASKS"]
+                           if t is not None and t.is_alive()])
     except Exception:
         pass
 
