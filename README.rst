@@ -17,6 +17,10 @@ MultiTasking: Non-blocking Python methods using decorators
     :target: https://pypi.python.org/pypi/multitasking
     :alt: PyPi status
 
+.. image:: https://img.shields.io/pypi/dm/multitasking.svg?maxAge=2592000
+    :target: https://pypi.python.org/pypi/multitasking
+    :alt: PyPi downloads
+    
 .. image:: https://img.shields.io/github/stars/ranaroussi/multitasking.svg?style=social&label=Star&maxAge=60
     :target: https://github.com/ranaroussi/multitasking
     :alt: Star this repo
