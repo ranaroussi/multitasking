@@ -1,7 +1,7 @@
 MultiTasking: Non-blocking Python methods using decorators
 ==========================================================
 
-.. image:: https://img.shields.io/pypi/pyversions/multitasking.svg?maxAge=2592000
+.. image:: https://img.shields.io/badge/python-2.7,%203.5+-blue.svg?style=flat
     :target: https://pypi.python.org/pypi/multitasking
     :alt: Python version
 
@@ -20,7 +20,7 @@ MultiTasking: Non-blocking Python methods using decorators
 .. image:: https://img.shields.io/pypi/dm/multitasking.svg?maxAge=2592000
     :target: https://pypi.python.org/pypi/multitasking
     :alt: PyPi downloads
-    
+
 .. image:: https://img.shields.io/github/stars/ranaroussi/multitasking.svg?style=social&label=Star&maxAge=60
     :target: https://github.com/ranaroussi/multitasking
     :alt: Star this repo
@@ -129,6 +129,13 @@ Install multitasking using ``pip``:
 .. code:: bash
 
     $ pip install multitasking --upgrade --no-cache-dir
+
+
+Install multitasking using ``conda``:
+
+.. code:: bash
+
+    $ conda install -c ranaroussi multitasking
 
 
 Legal Stuff
