@@ -21,6 +21,10 @@ MultiTasking: Non-blocking Python methods using decorators
     :target: https://pypi.python.org/pypi/multitasking
     :alt: PyPi downloads
 
+.. image:: https://www.codefactor.io/repository/github/ranaroussi/multitasking/badge
+    :target: https://www.codefactor.io/repository/github/ranaroussi/multitasking
+    :alt: CodeFactor
+
 .. image:: https://img.shields.io/github/stars/ranaroussi/multitasking.svg?style=social&label=Star&maxAge=60
     :target: https://github.com/ranaroussi/multitasking
     :alt: Star this repo
