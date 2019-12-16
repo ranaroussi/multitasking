@@ -145,5 +145,12 @@ Install multitasking using ``conda``:
 Legal Stuff
 ===========
 
-MultiTasking is distributed under the **GNU Lesser General Public License v3.0**. See the `LICENSE.txt <./LICENSE.txt>`_ file in the release for details.
-MultiTasking is not a product of Interactive Brokers, nor is it affiliated with Interactive Brokers.
+**yfinance** is distributed under the **Apache Software License**. See the `LICENSE.txt <./LICENSE.txt>`_ file in the release for details.
+
+
+P.S.
+------------
+
+Please drop me an note with any feedback you have.
+
+**Ran Aroussi**
