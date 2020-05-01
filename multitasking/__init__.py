@@ -131,11 +131,11 @@ def wait_for_tasks(sleep=0):
         return True
 
     try:
-        running = len([t.join(1) for t in config["TASKS"]
-                       if t is not None and t.is_alive()])
-        while running > 0:
+        while True:
             running = len([t.join(1) for t in config["TASKS"]
                            if t is not None and t.is_alive()])
+            if running == 0:
+                break
             _time.sleep(sleep)
     except Exception:
         pass
