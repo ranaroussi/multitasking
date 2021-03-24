@@ -5,7 +5,7 @@ MultiTasking: Non-blocking Python methods using decorators
     :target: https://pypi.python.org/pypi/multitasking
     :alt: Python version
 
-.. image:: https://img.shields.io/travis/ranaroussi/multitasking/master.svg?
+.. image:: https://img.shields.io/travis/ranaroussi/multitasking/main.svg?
     :target: https://travis-ci.org/ranaroussi/multitasking
     :alt: Travis-CI build status
 
