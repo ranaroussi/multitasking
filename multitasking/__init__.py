@@ -4,7 +4,7 @@
 # multitasking: Non-blocking Python methods using decorators
 # https://github.com/ranaroussi/multitasking
 #
-# Copyright 2016-2019 Ran Aroussi
+# Copyright 2016-2021 Ran Aroussi
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-__version__ = "0.0.9"
+__version__ = "0.0.10"
 
 import time as _time
 
