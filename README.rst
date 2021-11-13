@@ -145,7 +145,7 @@ Install multitasking using ``conda``:
 Legal Stuff
 ===========
 
-**yfinance** is distributed under the **Apache Software License**. See the `LICENSE.txt <./LICENSE.txt>`_ file in the release for details.
+**MultiTasking** is distributed under the **Apache Software License**. See the `LICENSE.txt <./LICENSE.txt>`_ file in the release for details.
 
 
 P.S.
