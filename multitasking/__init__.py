@@ -21,6 +21,8 @@
 
 __version__ = "0.0.9"
 
+import time as _time
+
 from sys import exit as sysexit
 from os import _exit as osexit
 
@@ -122,18 +124,19 @@ def task(callee):
     return async_method
 
 
-def wait_for_tasks():
+def wait_for_tasks(sleep=0):
     config["KILL_RECEIVED"] = True
 
     if config["POOLS"][config["POOL_NAME"]]['threads'] == 0:
         return True
 
     try:
-        running = len([t.join(1) for t in config["TASKS"]
-                       if t is not None and t.is_alive()])
-        while running > 0:
+        while True:
             running = len([t.join(1) for t in config["TASKS"]
                            if t is not None and t.is_alive()])
+            if running == 0:
+                break
+            _time.sleep(sleep)
     except Exception:
         pass
 
