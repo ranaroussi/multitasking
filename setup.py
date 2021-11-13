@@ -3,7 +3,7 @@
 """
 multitasking: Non-blocking Python methods using decorators
 https://github.com/ranaroussi/multitasking
-Copyright 2016-2018 Ran Aroussi
+Copyright 2016-2021 Ran Aroussi
 """
 
 import codecs
@@ -17,7 +17,7 @@ with codecs.open(os.path.join(os.path.abspath(os.path.dirname(__file__)),
 
 setup(
     name='multitasking',
-    version='0.0.9',
+    version='0.0.10',
     description='Non-blocking Python methods using decorators',
     long_description=long_description,
     url='https://github.com/ranaroussi/multitasking',
@@ -37,6 +37,9 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
     ],
     platforms=['any'],
     keywords='multitasking multitask threading async',
