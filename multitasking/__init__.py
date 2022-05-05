@@ -123,6 +123,8 @@ def task(callee):
 
     return async_method
 
+def get_list_of_tasks():
+    return config["TASKS"]
 
 def wait_for_tasks(sleep=0):
     config["KILL_RECEIVED"] = True
