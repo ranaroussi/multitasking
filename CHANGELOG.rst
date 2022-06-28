@@ -1,6 +1,14 @@
 Change Log
 ===========
 
+0.0.11
+-------
+- Added ``get_list_of_tasks()``
+
+0.0.10
+-------
+- Pass optional sleep time to ``wait_for_tasks()`` to prevent cpu burn
+
 0.0.9
 -------
 - Changed licence to Apache License
