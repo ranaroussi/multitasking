@@ -126,6 +126,9 @@ def task(callee):
 def get_list_of_tasks():
     return config["TASKS"]
 
+def get_active_tasks():
+    return [x for x in config["TASKS"] if x.is_alive()]
+
 def wait_for_tasks(sleep=0):
     config["KILL_RECEIVED"] = True
 
