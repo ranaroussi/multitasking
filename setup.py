@@ -17,7 +17,7 @@ with codecs.open(os.path.join(os.path.abspath(os.path.dirname(__file__)),
 
 setup(
     name='multitasking',
-    version='0.0.11',
+    version='0.0.12',
     description='Non-blocking Python methods using decorators',
     long_description=long_description,
     url='https://github.com/ranaroussi/multitasking',
@@ -40,6 +40,9 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
     ],
     platforms=['any'],
     keywords='multitasking multitask threading async',
