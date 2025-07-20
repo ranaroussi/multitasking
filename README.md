@@ -15,7 +15,7 @@ non-blocking methods simply by using a decorator. Perfect for I/O-bound tasks, A
 and any scenario where you want to run multiple operations concurrently without the complexity of manual
 thread or process management.
 
-## ✨ **What's New in v0.0.12-rc**
+## ✨ **What's New in v0.0.12**
 
 - 🎯 **Full Type Hint Support**: Complete type annotations for better IDE support and code safety
 - 📚 **Enhanced Documentation**: Comprehensive docstrings and inline comments for better maintainability
