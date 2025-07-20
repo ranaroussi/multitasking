@@ -12,7 +12,7 @@ from setuptools import setup, find_packages
 
 # Get the long description from the README file
 with codecs.open(os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                              'README.md'), encoding='utf-8') as f:
+                              'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
