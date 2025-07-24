@@ -511,21 +511,8 @@ Support
 =======
 
 -  📖 **Documentation**: This README and inline code documentation
--  🐛 **Issues**: `GitHub
-   Issues `__
--  🐦 **Twitter**: [@aroussi](https://twitter.com/aroussi)
-
-Changelog
-=========
-
-**v0.0.12-rc** - ✨ Added comprehensive type hints throughout the
-codebase - 📚 Enhanced documentation with detailed docstrings and inline
-comments - 🔧 Improved error handling with specific exception types - 🚀
-Optimized task creation and pool management logic - 🛡️ Made codebase
-fully PEP8 compliant and linter-friendly - 🧹 Better code organization
-and maintainability
-
-**v0.0.11** (Latest) - Previous stable release
+-  🐛 **Issues**: `GitHub Issues <https://github.com/ranaroussi/multitasking/issues>`__
+-  🐦 **Twitter**: `@aroussi <https://twitter.com/aroussi>`__
 
 --------------
 
