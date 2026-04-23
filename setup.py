@@ -17,9 +17,10 @@ with codecs.open(os.path.join(os.path.abspath(os.path.dirname(__file__)),
 
 setup(
     name='multitasking',
-    version='0.0.12',
+    version='0.0.13',
     description='Non-blocking Python methods using decorators',
     long_description=long_description,
+    long_description_content_type='text/x-rst',
     url='https://github.com/ranaroussi/multitasking',
     author='Ran Aroussi',
     author_email='ran@aroussi.com',

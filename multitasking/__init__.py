@@ -56,6 +56,7 @@ class Config(TypedDict):
     CPU_CORES: int  # Number of CPU cores detected
     ENGINE: str  # Default engine type ("thread" or "process")
     MAX_THREADS: int  # Global maximum thread/process count
+    DAEMON: bool  # Whether new tasks spawn as daemon threads/processes
     KILL_RECEIVED: bool  # Signal to stop accepting new tasks
     TASKS: List[Union[Thread, Process]]  # All created tasks
     POOLS: Dict[str, PoolConfig]  # Named execution pools
@@ -68,6 +69,11 @@ config: Config = {
     "CPU_CORES": cpu_count(),  # Auto-detect available CPU cores
     "ENGINE": "thread",  # Default to threading (safer than processes)
     "MAX_THREADS": cpu_count(),  # Start with one thread per CPU core
+    # Default to non-daemon to preserve the historical contract that
+    # Python waits for in-flight tasks to finish before exiting. Callers
+    # that run long-lived workers and need the interpreter to exit
+    # without joining them should opt in with `set_daemon(True)`.
+    "DAEMON": False,
     "KILL_RECEIVED": False,  # Not in shutdown mode initially
     "TASKS": [],  # No tasks created yet
     "POOLS": {},  # No pools created yet
@@ -118,6 +124,48 @@ def set_engine(kind: str = "") -> None:
     else:
         # Use threading for I/O-bound tasks (default)
         config["ENGINE"] = "thread"
+
+
+def set_daemon(daemon: bool = False) -> None:
+    """Configure whether new tasks spawn as daemon threads/processes.
+
+    Daemon tasks are terminated automatically when the interpreter
+    exits; non-daemon tasks block interpreter exit until they finish
+    (the long-standing default, which lets ``wait_for_tasks`` or a
+    plain script-end serve as an implicit join point).
+
+    Call this once, alongside :func:`set_engine`, when your code
+    contains long-lived ``@task`` workers (schedulers, pollers,
+    infinite cleanup loops) that must NOT block process exit — for
+    example in test suites, CLIs that shut down on SIGTERM, or any
+    application where tasks are fire-and-forget by design.
+
+    Args:
+        daemon: True to spawn daemon tasks, False to preserve the
+                historical non-daemon behavior (default).
+
+    Note:
+        This setting affects only tasks spawned after the call.
+        Existing tasks retain whatever daemon flag they were created
+        with. Also affects Processes as well as Threads; for
+        Processes the daemon flag additionally prevents them from
+        spawning child processes of their own.
+
+    Example:
+        import multitasking
+
+        multitasking.set_engine("thread")
+        multitasking.set_daemon(True)  # long-lived worker opt-in
+
+        @multitasking.task
+        def cleanup():
+            while True:
+                do_cleanup()
+                time.sleep(60)
+
+        cleanup()  # fires and forgets; exits cleanly with the process
+    """
+    config["DAEMON"] = bool(daemon)
 
 
 def getPool(name: Optional[str] = None) -> Dict[str, Union[str, int]]:
@@ -217,6 +265,12 @@ def task(
     to make it run asynchronously in the background using the current
     pool's configuration (threads or processes).
 
+    The spawned Thread/Process inherits its ``daemon`` flag from the
+    global :data:`config` via :func:`set_daemon` — by default tasks
+    are non-daemon (Python waits for them on interpreter exit). For
+    fire-and-forget background workers, call
+    ``multitasking.set_daemon(True)`` once before declaring the task.
+
     Args:
         callee: The function to be made asynchronous
 
@@ -274,12 +328,17 @@ def task(
                 # Get the engine class (Thread or Process)
                 engine_class = config["POOLS"][config["POOL_NAME"]]['engine']
 
-                # Create the task with daemon=False for proper cleanup
+                # Create the task. The daemon flag is pulled from the
+                # global config (see `set_daemon`) rather than hardcoded
+                # so callers can opt in to daemon semantics for
+                # fire-and-forget workers without breaking the historical
+                # "wait for tasks at exit" contract that non-daemon users
+                # (e.g. yfinance) depend on.
                 single = engine_class(
                     target=_run_via_pool,
                     args=args,
                     kwargs=kwargs,
-                    daemon=False
+                    daemon=config["DAEMON"],
                 )
             except Exception:
                 # Fallback for older Python versions without daemon param
