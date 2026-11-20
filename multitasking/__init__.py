@@ -26,7 +26,7 @@ import time as _time
 from functools import wraps
 from sys import exit as sysexit
 from os import _exit as osexit
-from typing import Any, Callable, Dict, List, Optional, TypedDict, Union
+from typing import Any, Callable, Dict, List, Optional, Type, TypedDict, Union
 
 # Threading and multiprocessing imports
 from threading import Thread, Semaphore
@@ -41,7 +41,7 @@ class PoolConfig(TypedDict):
     type (Thread or Process), pool name, and thread count.
     """
     pool: Optional[Semaphore]  # Controls concurrent task execution
-    engine: Union[type[Thread], type[Process]]  # Execution engine
+    engine: Union[Type[Thread], Type[Process]]  # Execution engine
     name: str  # Human-readable pool identifier
     threads: int  # Maximum concurrent tasks (0 = unlimited)
 
